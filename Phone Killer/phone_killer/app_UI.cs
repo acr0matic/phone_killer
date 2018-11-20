@@ -10,14 +10,14 @@ using System.Windows.Forms;
 
 namespace NumberKiller
 {
-    public partial class Form1 : Form
+    public partial class app_UI : Form
     {
         private String number = "+79653546090";
         private String name = "Светлана";
         private int page_number = 0;
         private String[] URLs = new String[5];
 
-        public Form1()
+        public app_UI()
         {
             InitializeComponent();
 
