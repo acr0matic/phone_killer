@@ -94,7 +94,7 @@ namespace NumberKiller
                         //changePage(page_number);
                         break;
 
-                    case 11:
+                    case 1:
                         foreach (HtmlElement htmlElement in webBrowser.Document.GetElementsByTagName("input"))
                             if (htmlElement.GetAttribute("name").Equals("name"))
                                 htmlElement.InnerText = name;
