@@ -12,105 +12,154 @@ namespace NumberKiller
 {
     public partial class app_UI : Form
     {
-        private String number = "+79653546090";
-        private String name = "Светлана";
+        private String phone;
+        private String name;
+
         private int page_number = 0;
-        private String[] URLs = new String[5];
+
+        //Объявляем листы для хранения значений полей HTML кода для ввода имени,
+        //Номера телефона и кнопки "подтвердить" 
+        private List<String> URLs = new List<String>();
+        private List<String> name_field_ID = new List<String>();
+        private List<String> button_ID = new List<String>();
 
         public app_UI()
         {
             InitializeComponent();
 
-            URLs[0] = "http://eco-gribs.ru/";
-            URLs[1] = "http://lexopol-low.dostavka2.me/";
-            URLs[2] = "http://flk.officialhealth.ru/";
-            URLs[3] = "http://c.potencialex.ru/149/v1/";
-            URLs[4] = "http://titan-gel.com";
+            //Добаление сайтов из базы в память программы
+            URLs.Add("http://eco-gribs.ru/");
+            URLs.Add("http://lexopol-low.dostavka2.me/");
+            URLs.Add("http://flk.officialhealth.ru/");
+            URLs.Add("http://c.potencialex.ru/149/v1/");
+            URLs.Add("http://titan-gel.com");
+            URLs.Add("http://c.reduslim.ru/149/v1");
+            URLs.Add("http://f4.orlium.ru");
         }
 
         private void changePage(int page)
-        {
-            webBrowser1.Navigate(URLs[page]);        
+        {         
+            webBrowser.Navigate(URLs[page]);
         }
 
-        private void webBrowser1_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
+        private void start_button_Click(object sender, EventArgs e)
+        {
+            phone = phone_textbox.Text;
+            name = name_textbox.Text;
+         
+            if (name_textbox.Text == "") {
+                name_textbox.Text = "Напишите имя";
+                return;
+            }
+
+            else if (phone_textbox.Text == "")
+            {
+                phone_textbox.Text = "Напишите номер";
+                return;
+            }
+
+            changePage(page_number);
+        }
+
+        private void auto_fill()
+        {
+            foreach (HtmlElement htmlElement in webBrowser.Document.GetElementsByTagName("input"))
+                if (htmlElement.GetAttribute("name").Equals("name"))
+                    htmlElement.InnerText = name;
+
+            foreach (HtmlElement htmlElement in webBrowser.Document.GetElementsByTagName("input"))
+                if (htmlElement.GetAttribute("name").Equals("phone"))
+                    htmlElement.InnerText = phone;
+
+            foreach (HtmlElement htmlElement in webBrowser.Document.GetElementsByTagName("button"))
+                if (htmlElement.GetAttribute("type").Equals("submit"))
+                    htmlElement.InvokeMember("click");
+        }
+
+ 
+
+        private void webBrowser_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
             try
             {
                 switch (page_number)
                 {
                     case 0:
-                        webBrowser1.Document.GetElementById("lv-formLanding1-phone").InnerText = number;
+                        webBrowser.Document.GetElementById("lv-formLanding1-phone").InnerText = phone;
 
-                        foreach (HtmlElement he in webBrowser1.Document.GetElementsByTagName("button"))
-                            if (he.GetAttribute("name").Equals("au1th"))
+                        foreach (HtmlElement he in webBrowser.Document.GetElementsByTagName("button"))
+                            if (he.GetAttribute("name").Equals("auth"))
                                 he.InvokeMember("click");
                         //page_number++;
                         //changePage(page_number);
                         break;
 
                     case 11:
-                        foreach (HtmlElement htmlElement in webBrowser1.Document.GetElementsByTagName("input"))
+                        foreach (HtmlElement htmlElement in webBrowser.Document.GetElementsByTagName("input"))
                             if (htmlElement.GetAttribute("name").Equals("name"))
                                 htmlElement.InnerText = name;
 
-                        foreach (HtmlElement htmlElement in webBrowser1.Document.GetElementsByTagName("input"))
+                        foreach (HtmlElement htmlElement in webBrowser.Document.GetElementsByTagName("input"))
                             if (htmlElement.GetAttribute("name").Equals("phone"))
-                                htmlElement.InnerText = number;
+                                htmlElement.InnerText = phone;
 
-                        foreach (HtmlElement htmlElement in webBrowser1.Document.GetElementsByTagName("button"))
-                            if (htmlElement.GetAttribute("type").Equals("subm1it"))
+                        foreach (HtmlElement htmlElement in webBrowser.Document.GetElementsByTagName("button"))
+                            if (htmlElement.GetAttribute("type").Equals("submit"))
                                 htmlElement.InvokeMember("click");
 
                         page_number++;
                         changePage(page_number);
                         break;
-                    case 22:
-                        foreach (HtmlElement htmlElement in webBrowser1.Document.GetElementsByTagName("input"))
+
+                    case 2:
+                        foreach (HtmlElement htmlElement in webBrowser.Document.GetElementsByTagName("input"))
                             if (htmlElement.GetAttribute("name").Equals("name"))
                                 htmlElement.InnerText = name;
 
-                        foreach (HtmlElement htmlElement in webBrowser1.Document.GetElementsByTagName("input"))
+                        foreach (HtmlElement htmlElement in webBrowser.Document.GetElementsByTagName("input"))
                             if (htmlElement.GetAttribute("name").Equals("phone"))
-                                htmlElement.InnerText = number;
+                                htmlElement.InnerText = phone;
 
-                        foreach (HtmlElement htmlElement in webBrowser1.Document.GetElementsByTagName("button"))
-                            if (htmlElement.GetAttribute("type").Equals("subm1it"))
+                        foreach (HtmlElement htmlElement in webBrowser.Document.GetElementsByTagName("button"))
+                            if (htmlElement.GetAttribute("type").Equals("submit"))
                                 htmlElement.InvokeMember("click");
                         page_number++;
                         changePage(page_number);
                         break;
 
-                    case 24:
-                        foreach (HtmlElement htmlElement in webBrowser1.Document.GetElementsByTagName("input"))
+                    case 3:
+                        foreach (HtmlElement htmlElement in webBrowser.Document.GetElementsByTagName("input"))
                             if (htmlElement.GetAttribute("name").Equals("fio"))
                                 htmlElement.InnerText = name;
 
-                        foreach (HtmlElement htmlElement in webBrowser1.Document.GetElementsByTagName("input"))
+                        foreach (HtmlElement htmlElement in webBrowser.Document.GetElementsByTagName("input"))
                             if (htmlElement.GetAttribute("name").Equals("phone"))
-                                htmlElement.InnerText = number;
+                                htmlElement.InnerText = phone;
 
-                        foreach (HtmlElement htmlElement in webBrowser1.Document.GetElementsByTagName("button"))
-                            if (htmlElement.GetAttribute("type").Equals("subm1it"))
+                        foreach (HtmlElement htmlElement in webBrowser.Document.GetElementsByTagName("button"))
+                            if (htmlElement.GetAttribute("type").Equals("submit"))
+                                htmlElement.InvokeMember("click");
+                        break;
+
+                    case 4:
+                        foreach (HtmlElement htmlElement in webBrowser.Document.GetElementsByTagName("input"))
+                            if (htmlElement.GetAttribute("name").Equals("name"))
+                                htmlElement.InnerText = name;
+
+                        foreach (HtmlElement htmlElement in webBrowser.Document.GetElementsByTagName("input"))
+                            if (htmlElement.GetAttribute("name").Equals("phone"))
+                                htmlElement.InnerText = phone;
+
+                        foreach (HtmlElement htmlElement in webBrowser.Document.GetElementsByTagName("button"))
+                            if (htmlElement.GetAttribute("type").Equals("submit"))
                                 htmlElement.InvokeMember("click");
                         break;
                 }
-                
             }
             catch (NullReferenceException)
             {
 
-            }                
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            changePage(page_number);
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
+            }
         }
     }
 }

@@ -28,99 +28,107 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.webBrowser1 = new System.Windows.Forms.WebBrowser();
+            this.start_button = new System.Windows.Forms.Button();
+            this.nameLabel = new System.Windows.Forms.Label();
+            this.phoneLabel = new System.Windows.Forms.Label();
+            this.name_textbox = new System.Windows.Forms.TextBox();
+            this.phone_textbox = new System.Windows.Forms.TextBox();
+            this.button2 = new System.Windows.Forms.Button();
+            this.webBrowser = new System.Windows.Forms.WebBrowser();
             this.SuspendLayout();
             // 
-            // textBox1
+            // start_button
             // 
-            this.textBox1.Location = new System.Drawing.Point(3, 58);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(129, 20);
-            this.textBox1.TabIndex = 1;
+            this.start_button.Font = new System.Drawing.Font("Roboto Th", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.start_button.Location = new System.Drawing.Point(173, 109);
+            this.start_button.Name = "start_button";
+            this.start_button.Size = new System.Drawing.Size(166, 59);
+            this.start_button.TabIndex = 0;
+            this.start_button.Text = "ЗАПУСК";
+            this.start_button.UseVisualStyleBackColor = true;
+            this.start_button.Click += new System.EventHandler(this.start_button_Click);
             // 
-            // textBox2
+            // nameLabel
             // 
-            this.textBox2.Location = new System.Drawing.Point(273, 58);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(129, 20);
-            this.textBox2.TabIndex = 2;
+            this.nameLabel.AutoSize = true;
+            this.nameLabel.Font = new System.Drawing.Font("Roboto Th", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.nameLabel.Location = new System.Drawing.Point(12, 27);
+            this.nameLabel.Name = "nameLabel";
+            this.nameLabel.Size = new System.Drawing.Size(44, 19);
+            this.nameLabel.TabIndex = 1;
+            this.nameLabel.Text = "Имя:";
+            this.nameLabel.TextAlign = System.Drawing.ContentAlignment.BottomRight;
             // 
-            // button1
+            // phoneLabel
             // 
-            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.button1.Font = new System.Drawing.Font("Roboto Th", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(138, 34);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(129, 44);
-            this.button1.TabIndex = 3;
-            this.button1.Text = "ПУСК";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.phoneLabel.AutoSize = true;
+            this.phoneLabel.Font = new System.Drawing.Font("Roboto Th", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.phoneLabel.Location = new System.Drawing.Point(12, 71);
+            this.phoneLabel.Name = "phoneLabel";
+            this.phoneLabel.Size = new System.Drawing.Size(138, 19);
+            this.phoneLabel.TabIndex = 2;
+            this.phoneLabel.Text = "Номер телефона:";
+            this.phoneLabel.TextAlign = System.Drawing.ContentAlignment.BottomRight;
             // 
-            // label1
+            // name_textbox
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Roboto Th", 10F);
-            this.label1.Location = new System.Drawing.Point(273, 38);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(129, 17);
-            this.label1.TabIndex = 4;
-            this.label1.Text = "НОМЕР ТЕЛЕФОНА";
+            this.name_textbox.Location = new System.Drawing.Point(173, 27);
+            this.name_textbox.Name = "name_textbox";
+            this.name_textbox.Size = new System.Drawing.Size(166, 20);
+            this.name_textbox.TabIndex = 3;
             // 
-            // label2
+            // phone_textbox
             // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Roboto Th", 10F);
-            this.label2.Location = new System.Drawing.Point(18, 38);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(95, 17);
-            this.label2.TabIndex = 5;
-            this.label2.Text = "ИМЯ ЖЕРТВЫ";
+            this.phone_textbox.Location = new System.Drawing.Point(173, 70);
+            this.phone_textbox.Name = "phone_textbox";
+            this.phone_textbox.Size = new System.Drawing.Size(166, 20);
+            this.phone_textbox.TabIndex = 4;
             // 
-            // webBrowser1
+            // button2
             // 
-            this.webBrowser1.Location = new System.Drawing.Point(3, 84);
-            this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
-            this.webBrowser1.Name = "webBrowser1";
-            this.webBrowser1.ScriptErrorsSuppressed = true;
-            this.webBrowser1.Size = new System.Drawing.Size(396, 109);
-            this.webBrowser1.TabIndex = 0;
-            this.webBrowser1.Url = new System.Uri("", System.UriKind.Relative);
-            this.webBrowser1.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.webBrowser1_DocumentCompleted);
+            this.button2.Font = new System.Drawing.Font("Roboto Th", 12.75F);
+            this.button2.Location = new System.Drawing.Point(12, 140);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(74, 28);
+            this.button2.TabIndex = 5;
+            this.button2.Text = "БАЗА";
+            this.button2.UseVisualStyleBackColor = true;
+            // 
+            // webBrowser
+            // 
+            this.webBrowser.Location = new System.Drawing.Point(375, 27);
+            this.webBrowser.MinimumSize = new System.Drawing.Size(20, 20);
+            this.webBrowser.Name = "webBrowser";
+            this.webBrowser.ScriptErrorsSuppressed = true;
+            this.webBrowser.Size = new System.Drawing.Size(632, 594);
+            this.webBrowser.TabIndex = 6;
+            this.webBrowser.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.webBrowser_DocumentCompleted);
             // 
             // app_UI
             // 
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(411, 205);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.textBox2);
-            this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.webBrowser1);
+            this.ClientSize = new System.Drawing.Size(1019, 633);
+            this.Controls.Add(this.webBrowser);
+            this.Controls.Add(this.button2);
+            this.Controls.Add(this.phone_textbox);
+            this.Controls.Add(this.name_textbox);
+            this.Controls.Add(this.phoneLabel);
+            this.Controls.Add(this.nameLabel);
+            this.Controls.Add(this.start_button);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
             this.Name = "app_UI";
-            this.Text = "Phone killer v0.1";
-            this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.WebBrowser webBrowser1;
+        private System.Windows.Forms.Button start_button;
+        private System.Windows.Forms.Label nameLabel;
+        private System.Windows.Forms.Label phoneLabel;
+        private System.Windows.Forms.TextBox name_textbox;
+        private System.Windows.Forms.TextBox phone_textbox;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.WebBrowser webBrowser;
     }
 }
 
