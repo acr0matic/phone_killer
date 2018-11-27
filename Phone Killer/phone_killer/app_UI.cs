@@ -16,11 +16,13 @@ namespace NumberKiller
         private String name;
 
         private int page_number = 0;
+        private int count_of_pages = 0;
 
         //Объявляем листы для хранения значений полей HTML кода для ввода имени,
         //Номера телефона и кнопки "подтвердить" 
         private List<String> URLs = new List<String>();
-        private List<String> name_field_ID = new List<String>();
+        private List<String> name_field = new List<String>();
+        private List<String> phone_field = new List<String>();
         private List<String> button_ID = new List<String>();
 
         public app_UI()
@@ -35,10 +37,21 @@ namespace NumberKiller
             URLs.Add("http://titan-gel.com");
             URLs.Add("http://c.reduslim.ru/149/v1");
             URLs.Add("http://f4.orlium.ru");
+
+            count_of_pages = 1;
+
+            //Иницилизация списка атрибутов для ввода имени в текстовое поле
+            name_field.Add("name");
+            name_field.Add("fio");
+            name_field.Add("order[fio]");
+
+            //Иницилизация списка атрибутов для ввода номера телефона в текстовое поле
+            name_field.Add("FormLanding[phone]");
+            name_field.Add("phone");
         }
 
         private void changePage(int page)
-        {         
+        {
             webBrowser.Navigate(URLs[page]);
         }
 
@@ -48,13 +61,14 @@ namespace NumberKiller
             name = name_textbox.Text;
          
             if (name_textbox.Text == "") {
-                name_textbox.Text = "Напишите имя";
+                info_label.ForeColor = Color.Red;
+                info_label.Text = "Вы не указали имя";
                 return;
             }
 
-            else if (phone_textbox.Text == "")
-            {
-                phone_textbox.Text = "Напишите номер";
+            else if (phone_textbox.Text == "") {
+                info_label.ForeColor = Color.Red;
+                info_label.Text = "Вы не указали номер телефона";
                 return;
             }
 
@@ -64,96 +78,30 @@ namespace NumberKiller
         private void auto_fill()
         {
             foreach (HtmlElement htmlElement in webBrowser.Document.GetElementsByTagName("input"))
-                if (htmlElement.GetAttribute("name").Equals("name"))
-                    htmlElement.InnerText = name;
+                foreach (String nameElement in name_field)
+                    if (htmlElement.GetAttribute("name").Equals(nameElement))
+                        htmlElement.InnerText = name;
 
             foreach (HtmlElement htmlElement in webBrowser.Document.GetElementsByTagName("input"))
-                if (htmlElement.GetAttribute("name").Equals("phone"))
-                    htmlElement.InnerText = phone;
+                foreach (String phoneElement in phone_field)
+                    if (htmlElement.GetAttribute("name").Equals(phoneElement))
+                        htmlElement.InnerText = phone;
 
             foreach (HtmlElement htmlElement in webBrowser.Document.GetElementsByTagName("button"))
-                if (htmlElement.GetAttribute("type").Equals("submit"))
+                if (htmlElement.GetAttribute("type").Equals("subm1it"))
                     htmlElement.InvokeMember("click");
-        }
 
- 
+            if (count_of_pages !=0)
+               changePage(page_number++);
+        }
 
         private void webBrowser_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
             try
             {
-                switch (page_number)
-                {
-                    case 0:
-                        webBrowser.Document.GetElementById("lv-formLanding1-phone").InnerText = phone;
-
-                        foreach (HtmlElement he in webBrowser.Document.GetElementsByTagName("button"))
-                            if (he.GetAttribute("name").Equals("auth"))
-                                he.InvokeMember("click");
-                        //page_number++;
-                        //changePage(page_number);
-                        break;
-
-                    case 1:
-                        foreach (HtmlElement htmlElement in webBrowser.Document.GetElementsByTagName("input"))
-                            if (htmlElement.GetAttribute("name").Equals("name"))
-                                htmlElement.InnerText = name;
-
-                        foreach (HtmlElement htmlElement in webBrowser.Document.GetElementsByTagName("input"))
-                            if (htmlElement.GetAttribute("name").Equals("phone"))
-                                htmlElement.InnerText = phone;
-
-                        foreach (HtmlElement htmlElement in webBrowser.Document.GetElementsByTagName("button"))
-                            if (htmlElement.GetAttribute("type").Equals("submit"))
-                                htmlElement.InvokeMember("click");
-
-                        page_number++;
-                        changePage(page_number);
-                        break;
-
-                    case 2:
-                        foreach (HtmlElement htmlElement in webBrowser.Document.GetElementsByTagName("input"))
-                            if (htmlElement.GetAttribute("name").Equals("name"))
-                                htmlElement.InnerText = name;
-
-                        foreach (HtmlElement htmlElement in webBrowser.Document.GetElementsByTagName("input"))
-                            if (htmlElement.GetAttribute("name").Equals("phone"))
-                                htmlElement.InnerText = phone;
-
-                        foreach (HtmlElement htmlElement in webBrowser.Document.GetElementsByTagName("button"))
-                            if (htmlElement.GetAttribute("type").Equals("submit"))
-                                htmlElement.InvokeMember("click");
-                        page_number++;
-                        changePage(page_number);
-                        break;
-
-                    case 3:
-                        foreach (HtmlElement htmlElement in webBrowser.Document.GetElementsByTagName("input"))
-                            if (htmlElement.GetAttribute("name").Equals("fio"))
-                                htmlElement.InnerText = name;
-
-                        foreach (HtmlElement htmlElement in webBrowser.Document.GetElementsByTagName("input"))
-                            if (htmlElement.GetAttribute("name").Equals("phone"))
-                                htmlElement.InnerText = phone;
-
-                        foreach (HtmlElement htmlElement in webBrowser.Document.GetElementsByTagName("button"))
-                            if (htmlElement.GetAttribute("type").Equals("submit"))
-                                htmlElement.InvokeMember("click");
-                        break;
-
-                    case 4:
-                        foreach (HtmlElement htmlElement in webBrowser.Document.GetElementsByTagName("input"))
-                            if (htmlElement.GetAttribute("name").Equals("name"))
-                                htmlElement.InnerText = name;
-
-                        foreach (HtmlElement htmlElement in webBrowser.Document.GetElementsByTagName("input"))
-                            if (htmlElement.GetAttribute("name").Equals("phone"))
-                                htmlElement.InnerText = phone;
-
-                        foreach (HtmlElement htmlElement in webBrowser.Document.GetElementsByTagName("button"))
-                            if (htmlElement.GetAttribute("type").Equals("submit"))
-                                htmlElement.InvokeMember("click");
-                        break;
+                if (count_of_pages >= 0) {
+                    count_of_pages--;
+                    auto_fill();
                 }
             }
             catch (NullReferenceException)

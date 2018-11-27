@@ -35,6 +35,8 @@
             this.phone_textbox = new System.Windows.Forms.TextBox();
             this.button2 = new System.Windows.Forms.Button();
             this.webBrowser = new System.Windows.Forms.WebBrowser();
+            this.info_label = new System.Windows.Forms.Label();
+            this.log_label = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // start_button
@@ -79,7 +81,7 @@
             // 
             // phone_textbox
             // 
-            this.phone_textbox.Location = new System.Drawing.Point(173, 70);
+            this.phone_textbox.Location = new System.Drawing.Point(173, 69);
             this.phone_textbox.Name = "phone_textbox";
             this.phone_textbox.Size = new System.Drawing.Size(166, 20);
             this.phone_textbox.TabIndex = 4;
@@ -104,9 +106,38 @@
             this.webBrowser.TabIndex = 6;
             this.webBrowser.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.webBrowser_DocumentCompleted);
             // 
+            // info_label
+            // 
+            this.info_label.AutoSize = true;
+            this.info_label.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.info_label.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.info_label.Font = new System.Drawing.Font("Roboto Th", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.info_label.ForeColor = System.Drawing.Color.MediumBlue;
+            this.info_label.Location = new System.Drawing.Point(63, 186);
+            this.info_label.Name = "info_label";
+            this.info_label.Size = new System.Drawing.Size(2, 21);
+            this.info_label.TabIndex = 7;
+            this.info_label.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // log_label
+            // 
+            this.log_label.AutoSize = true;
+            this.log_label.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.log_label.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.log_label.Font = new System.Drawing.Font("Roboto Th", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.log_label.ForeColor = System.Drawing.Color.MidnightBlue;
+            this.log_label.Location = new System.Drawing.Point(16, 186);
+            this.log_label.Name = "log_label";
+            this.log_label.Size = new System.Drawing.Size(41, 21);
+            this.log_label.TabIndex = 8;
+            this.log_label.Text = "Лог:";
+            this.log_label.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // app_UI
             // 
             this.ClientSize = new System.Drawing.Size(1019, 633);
+            this.Controls.Add(this.log_label);
+            this.Controls.Add(this.info_label);
             this.Controls.Add(this.webBrowser);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.phone_textbox);
@@ -129,6 +160,8 @@
         private System.Windows.Forms.TextBox phone_textbox;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.WebBrowser webBrowser;
+        private System.Windows.Forms.Label info_label;
+        private System.Windows.Forms.Label log_label;
     }
 }
 
