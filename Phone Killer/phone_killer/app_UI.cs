@@ -32,6 +32,7 @@ namespace NumberKiller
         private List<String> phone_field = new List<String>();
         private List<String> button = new List<String>();
 
+        // Иницилизация приложения и полей во время запуска
         public app_UI()
         {
             InitializeComponent();
@@ -62,32 +63,59 @@ namespace NumberKiller
             button.Add("input");
         }
 
+        // Обработчик нажатия на кнопку старт
         private void start_button_Click(object sender, EventArgs e)
         {
             // Получаем значения из полей ввода и записываем в переменные
             phone = phone_textbox.Text;
             name = name_textbox.Text;
-         
-            // Смотрим на наличие введенного имени в поле
-            if (name_textbox.Text == "") {
-                info_label.ForeColor = Color.Red;
-                info_label.Text = "Вы не указали имя";
+
+            // Смотрим на наличие введенного имени и телефона в поля
+            if ((name_textbox.Text == "") && (phone_textbox.Text == ""))
+            {
+                name_field_label.Visible = true;
+                phone_field_label.Visible = true;
                 return;
             }
 
-            // Смотрим на наличие введенного номера телефона в поле
-            else if (phone_textbox.Text == "") {
-                info_label.ForeColor = Color.Red;
-                info_label.Text = "Вы не указали номер телефона";
+            // Смотрим на наличие введенного имени в поле
+            else if (name_textbox.Text == "")
+            {
+                name_field_label.Visible = true;
 
                 // Пишем для того чтобы преждевеременно выйти из функции
                 return;
             }
 
-            // Производим старт вызывая метод смены страницы
-            ChangePage(page_number);
+            // Смотрим на наличие введенного номера телефона в поле
+            else if (phone_textbox.Text == "")
+            {
+                phone_field_label.Visible = true;
+
+                // Пишем для того чтобы преждевеременно выйти из функции
+                return;
+            }
+
+            // Если все введено производим запуск вызывая метод смены страницы
+            else
+            {
+                ChangePage(page_number);
+            }
         }
 
+        // Убираем сообщение о том что не введено имя когда нажимаем на поле
+        private void name_textbox_MouseClick(object sender, MouseEventArgs e)
+        {
+            name_field_label.Visible = false;
+        }
+
+        // Убираем сообщение о том что не введен номер телефона когда нажимаем на поле
+        private void phone_textbox_MouseClick(object sender, MouseEventArgs e)
+        {
+            phone_field_label.Visible = false;
+        }
+
+        // Метод смены страницы
         private void ChangePage(int page)
         {
             // Открываем поток для записи в файл
@@ -99,17 +127,25 @@ namespace NumberKiller
             // Который задается аргументом этого метода
             file.WriteLine("- Загрузка: " + URLs[page]);
 
-            // Блок проверки страницы на ошибки
+            // Блок проверки валидности страницы
             urlCheck = new Uri(URLs[page]);
+
+            // Создаем запрос по URL сайта
             request = (HttpWebRequest)WebRequest.Create(urlCheck);
             request.Timeout = 1000;
+
+            // Отвлавливание исключения 
             try
             {
+                // Получаем ответ сайта
                 response = (HttpWebResponse)request.GetResponse();
                 webBrowser.Navigate(URLs[page]);
             }
+
+            // Вызывается если ответ не был получен
             catch (Exception)
             {
+                // Вызываем лог-систему и присваеваем ей код исключения (404 - страница не найдена)
                 LogSystem(404);
                 count_of_pages--;
                 page_number++;
@@ -117,6 +153,7 @@ namespace NumberKiller
             }       
         }
 
+        // Метод отвечающий за прогрузку веб-страницы до конца
         private void webBrowser_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
             try
@@ -135,6 +172,7 @@ namespace NumberKiller
             }
         }
 
+        // Метод автозаполнения полей и нажатия на кнопки на сайтах
         private void Auto_fill()
         {
             foreach (HtmlElement htmlElement in webBrowser.Document.GetElementsByTagName("input"))
@@ -152,12 +190,16 @@ namespace NumberKiller
                     if (htmlElement.GetAttribute("type").Equals("subm1it"))
                         htmlElement.InvokeMember("click");
 
+            // Стоп сигнал если количество страниц будет равно нулю
             if (count_of_pages !=0)
                ChangePage(page_number);
         }
 
+        // Метод лог системы
+        // В качествер аргумента принимает целочисленное знаничение - код статуса
         private void LogSystem(int status)
         {
+            // Выборка по коду статуса и запись в файл информации
             switch (status)
             {
                 case 1:
@@ -173,8 +215,19 @@ namespace NumberKiller
                     file.WriteLine("- Страница не найдена (404)");
                     break;
             }
+
+            // Пишем перенос в файл для раздельного логирования 
             file.WriteLine("\n");
+
+            // Закрываем поток записи в файл для того чтобы изменения были внесенны в файл
             file.Close();
-        }        
+        }
+
+        // Обработка кнопки "отчет"
+        private void log_button_Click(object sender, EventArgs e)
+        {
+            // Открываем текстовый файл в блокноте
+            System.Diagnostics.Process.Start(@"C:\Users\User\Desktop\logs.txt");
+        }
     }
 }
