@@ -33,11 +33,11 @@
             this.phoneLabel = new System.Windows.Forms.Label();
             this.name_textbox = new System.Windows.Forms.TextBox();
             this.source_button = new System.Windows.Forms.Button();
-            this.webBrowser = new System.Windows.Forms.WebBrowser();
             this.phone_field_label = new System.Windows.Forms.Label();
             this.name_field_label = new System.Windows.Forms.Label();
             this.phone_textbox = new System.Windows.Forms.MaskedTextBox();
             this.log_button = new System.Windows.Forms.Button();
+            this.webBrowser = new System.Windows.Forms.WebBrowser();
             this.SuspendLayout();
             // 
             // start_button
@@ -85,22 +85,12 @@
             // source_button
             // 
             this.source_button.Font = new System.Drawing.Font("Roboto Th", 12.75F);
-            this.source_button.Location = new System.Drawing.Point(12, 114);
+            this.source_button.Location = new System.Drawing.Point(12, 111);
             this.source_button.Name = "source_button";
             this.source_button.Size = new System.Drawing.Size(74, 28);
             this.source_button.TabIndex = 5;
             this.source_button.Text = "БАЗА";
             this.source_button.UseVisualStyleBackColor = true;
-            // 
-            // webBrowser
-            // 
-            this.webBrowser.Location = new System.Drawing.Point(317, 23);
-            this.webBrowser.MinimumSize = new System.Drawing.Size(20, 20);
-            this.webBrowser.Name = "webBrowser";
-            this.webBrowser.ScriptErrorsSuppressed = true;
-            this.webBrowser.Size = new System.Drawing.Size(690, 594);
-            this.webBrowser.TabIndex = 6;
-            this.webBrowser.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.webBrowser_DocumentCompleted);
             // 
             // phone_field_label
             // 
@@ -149,6 +139,16 @@
             this.log_button.UseVisualStyleBackColor = true;
             this.log_button.Click += new System.EventHandler(this.log_button_Click);
             // 
+            // webBrowser
+            // 
+            this.webBrowser.Location = new System.Drawing.Point(317, 23);
+            this.webBrowser.MinimumSize = new System.Drawing.Size(20, 20);
+            this.webBrowser.Name = "webBrowser";
+            this.webBrowser.ScriptErrorsSuppressed = true;
+            this.webBrowser.Size = new System.Drawing.Size(690, 594);
+            this.webBrowser.TabIndex = 6;
+            this.webBrowser.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.webBrowser_DocumentCompleted);
+            // 
             // app_UI
             // 
             this.ClientSize = new System.Drawing.Size(1019, 633);
@@ -175,11 +175,11 @@
         private System.Windows.Forms.Label phoneLabel;
         private System.Windows.Forms.TextBox name_textbox;
         private System.Windows.Forms.Button source_button;
-        private System.Windows.Forms.WebBrowser webBrowser;
         private System.Windows.Forms.Label phone_field_label;
         private System.Windows.Forms.Label name_field_label;
         private System.Windows.Forms.MaskedTextBox phone_textbox;
         private System.Windows.Forms.Button log_button;
+        private System.Windows.Forms.WebBrowser webBrowser;
     }
 }
 

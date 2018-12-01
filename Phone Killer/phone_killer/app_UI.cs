@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Net;
 using System.Windows.Forms;
 using System.IO;
@@ -9,6 +8,9 @@ namespace NumberKiller
 {
     public partial class app_UI : Form
     {
+
+        // БЛОК ИНИЦИЛИЗАЦИИ
+/******************************************************************************************************************************************/
         // Объявляем запись в файл и задаем путь по умлочанию для файла
         private StreamWriter file;
 
@@ -40,11 +42,11 @@ namespace NumberKiller
             // Добаление сайтов из базы в память программы
             URLs.Add("http://eco-gribs.ru/");
             URLs.Add("http://lexopol-low.dostavka2.me/");
-            URLs.Add("http://flk.officialhealth.ru/");
-            URLs.Add("http://c.pote1ncialex.ru/149/v1/");
-            URLs.Add("http://1titan-gel.com");
-            URLs.Add("http://c.reduslim.ru/149/v1");
-            URLs.Add("http://f4.orlium.ru");
+            URLs.Add("http://c.potencialex.ru/149/v1/");
+            URLs.Add("http://titan-gel.com");
+            URLs.Add("http://imira.a47m.biz/");
+            URLs.Add("http://hq.shopent.net/");
+            URLs.Add("http://kvlow.meta-complex.com/");
 
             // Иницилизация количества сайтов
             count_of_pages = URLs.Count;
@@ -53,22 +55,29 @@ namespace NumberKiller
             name_field.Add("name");
             name_field.Add("fio");
             name_field.Add("order[fio]");
+            name_field.Add("FormLanding[fio]");
 
             // Иницилизация списка атрибутов для ввода номера телефона в текстовое поле
-            name_field.Add("FormLanding[phone]");
-            name_field.Add("phone");
-            name_field.Add("order[phone]");
+            phone_field.Add("FormLanding[phone]");
+            phone_field.Add("phone");
+            phone_field.Add("order[phone]");
+            phone_field.Add("FormLanding[phone]");
 
             // Объявление списка атрибутов для нажатия кнопки
             button.Add("input");
         }
 
+        // БЛОК ОБРАБОТКИ ФОРМЫ
+/******************************************************************************************************************************************/
+
         // Обработчик нажатия на кнопку старт
         private void start_button_Click(object sender, EventArgs e)
         {
-            // Получаем значения из полей ввода и записываем в переменные
-            phone = phone_textbox.Text;
+            // Получаем значения из полей ввода и записываем в переменные          
             name = name_textbox.Text;
+
+            // Удаляем лишние символы из строки с телефоном
+            phone = phone_textbox.Text.Trim(new char[] {' ', '*', '-', '(', ')' });          
 
             // Смотрим на наличие введенного имени и телефона в поля
             if ((name_textbox.Text == "") && (phone_textbox.Text == ""))
@@ -99,6 +108,8 @@ namespace NumberKiller
             // Если все введено производим запуск вызывая метод смены страницы
             else
             {
+                // Логируем информацию о жертве
+                LogSystem(2);
                 ChangePage(page_number);
             }
         }
@@ -115,17 +126,20 @@ namespace NumberKiller
             phone_field_label.Visible = false;
         }
 
+        // Обработка кнопки "отчет"
+        private void log_button_Click(object sender, EventArgs e)
+        {
+            // Открываем текстовый файл в блокноте
+            System.Diagnostics.Process.Start(@"C:\Users\User\Desktop\logs.txt");
+        }
+
+        // БЛОК ВНУТРЕННЕЙ ЛОГИКИ
+/******************************************************************************************************************************************/
+
         // Метод смены страницы
         private void ChangePage(int page)
         {
-            // Открываем поток для записи в файл
-            // Первый аргумент - путь где будет создан/перезаписан файл
-            // Второй - возможна ли перезапись файла
-            file = new StreamWriter(@"C:\Users\User\Desktop\logs.txt", true);
-
-            // Пишем в файл статус + элемент массива веб-адресов по индексу 
-            // Который задается аргументом этого метода
-            file.WriteLine("- Загрузка: " + URLs[page]);
+            LogSystem(0);
 
             // Блок проверки валидности страницы
             urlCheck = new Uri(URLs[page]);
@@ -158,7 +172,7 @@ namespace NumberKiller
         {
             try
             {
-                if (count_of_pages >= 0)
+                if (count_of_pages > 0)
                 {
                     LogSystem(1);
                     count_of_pages--;
@@ -175,59 +189,81 @@ namespace NumberKiller
         // Метод автозаполнения полей и нажатия на кнопки на сайтах
         private void Auto_fill()
         {
+
+            // Перебор страницы и поиск поля ввода имени 
+            // Если найденый атрибут NAME у тега INPUT совпадает с одним из элементом в списке возможных вариантов
+            // То заполняем поле в форме нашей переменной 
             foreach (HtmlElement htmlElement in webBrowser.Document.GetElementsByTagName("input"))
                 foreach (String nameElement in name_field)
                     if (htmlElement.GetAttribute("name").Equals(nameElement)) 
                         htmlElement.InnerText = name;
-                        
+
             foreach (HtmlElement htmlElement in webBrowser.Document.GetElementsByTagName("input"))
                 foreach (String phoneElement in phone_field)
-                    if (htmlElement.GetAttribute("name").Equals(phoneElement)) 
+                    if (htmlElement.GetAttribute("name").Equals(phoneElement))
                         htmlElement.InnerText = phone;
-                        
+
+            foreach (HtmlElement htmlElement in webBrowser.Document.GetElementsByTagName("input"))
+                foreach (String buttonElement in button)
+                    if (htmlElement.GetAttribute("type").Equals("submit"))
+                        htmlElement.InvokeMember("click"); // Производим виртуальное нажатие кнопки
+
             foreach (HtmlElement htmlElement in webBrowser.Document.GetElementsByTagName("button"))
                 foreach (String buttonElement in button)
-                    if (htmlElement.GetAttribute("type").Equals("subm1it"))
-                        htmlElement.InvokeMember("click");
+                    if (htmlElement.GetAttribute("type").Equals("submit"))                     
+                        htmlElement.InvokeMember("click"); // Производим виртуальное нажатие кнопки
+
+            // Логируем выполнение 
+            LogSystem(-1);
 
             // Стоп сигнал если количество страниц будет равно нулю
             if (count_of_pages !=0)
                ChangePage(page_number);
         }
 
-        // Метод лог системы
-        // В качествер аргумента принимает целочисленное знаничение - код статуса
+        // Лог система в качестве вызываемого метода
+        // В качестве аргумента принимает целочисленное знаничение - код статуса
         private void LogSystem(int status)
         {
-            // Выборка по коду статуса и запись в файл информации
-            switch (status)
+            // Открываем поток для записи в файл
+            // Первый аргумент - путь где будет создан/перезаписан файл
+            // Второй - возможна ли перезапись файла
+            file = new StreamWriter(@"C:\Users\User\Desktop\logs.txt", true);
+
+            // Пишет перед каждой строчкой текущую дату и время
+            file.Write(DateTime.Now.ToString("dd.MM.yyyy | HH:mm:ss "));
+
+            
+            switch (status) // Выборка по коду статуса и запись в файл информации
             {
+                case -1:
+                    file.Write("- Данные отправлены");
+                    break;
+                case 0:
+                    file.Write("- Загрузка: " + URLs[page_number]);
+                    break;
                 case 1:
-                    file.WriteLine("- Успешно загружено");
+                    file.Write("- Успешно загружено");
+                    break;
+                case 2:
+                    file.Write("- Атака на номер: " + phone + ", Имя: " + name);
                     break;
                 case 200:
-                    file.WriteLine("- Поле для ввода имени найдено и заполнено");
+                    file.Write("- Поле для ввода имени не найдено");
                     break;
                 case 205:
-                    file.WriteLine("- Поле для ввода телефона найдено и заполнено");
+                    file.Write("- Поле для ввода телефона не найдено");
                     break;
                 case 404:
-                    file.WriteLine("- Страница не найдена (404)");
+                    file.Write("- Страница не найдена (404)");
                     break;
             }
 
-            // Пишем перенос в файл для раздельного логирования 
-            file.WriteLine("\n");
+            // Переносим строку
+            file.Write("\n");
 
             // Закрываем поток записи в файл для того чтобы изменения были внесенны в файл
             file.Close();
-        }
-
-        // Обработка кнопки "отчет"
-        private void log_button_Click(object sender, EventArgs e)
-        {
-            // Открываем текстовый файл в блокноте
-            System.Diagnostics.Process.Start(@"C:\Users\User\Desktop\logs.txt");
-        }
+        }      
     }
 }
