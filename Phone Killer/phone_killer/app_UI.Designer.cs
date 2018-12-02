@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(app_UI));
             this.start_button = new System.Windows.Forms.Button();
             this.nameLabel = new System.Windows.Forms.Label();
             this.phoneLabel = new System.Windows.Forms.Label();
@@ -210,7 +211,7 @@
             // 
             // app_UI
             // 
-            this.BackColor = System.Drawing.Color.White;
+            this.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.ClientSize = new System.Drawing.Size(323, 289);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.progress_label);
@@ -227,6 +228,7 @@
             this.Controls.Add(this.nameLabel);
             this.Controls.Add(this.start_button);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "app_UI";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.TopMost = true;
