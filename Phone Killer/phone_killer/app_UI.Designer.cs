@@ -160,7 +160,6 @@
             this.webBrowser.Size = new System.Drawing.Size(299, 20);
             this.webBrowser.TabIndex = 6;
             this.webBrowser.Visible = false;
-            this.webBrowser.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.webBrowser_DocumentCompleted);
             // 
             // progress_bar
             // 

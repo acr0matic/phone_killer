@@ -55,6 +55,8 @@
     <Compile Include="app_UI.Designer.cs">
       <DependentUpon>app_UI.cs</DependentUpon>
     </Compile>
+    <Compile Include="core\LogSystem.cs" />
+    <Compile Include="core\WebParser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="app_UI.resx">
