@@ -8,11 +8,11 @@ namespace NumberKiller
 
     public partial class app_UI : Form
     {
-        // БЛОК ИНИЦИЛИЗАЦИИ
-        /******************************************************************************************************************************************/
+        // Объявление констант формы за любой ее участок
         public const int WM_NCLBUTTONDOWN = 0xA1;
         public const int HT_CAPTION = 0x2;
 
+        // Объявляем методы с внешней реализацией
         [System.Runtime.InteropServices.DllImportAttribute("user32.dll")]
         public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
         [System.Runtime.InteropServices.DllImportAttribute("user32.dll")]
@@ -32,11 +32,12 @@ namespace NumberKiller
         public app_UI()
         {
             InitializeComponent();
-            //progress_bar.Maximum = webParser.URLs.Count;
+            webParser.Init();
+            if (!System.IO.File.Exists("logs.txt"))
+            {
+                System.IO.File.Create("logs.txt");
+            }
         }
-
-        // БЛОК ОБРАБОТКИ ФОРМЫ
-/******************************************************************************************************************************************/
 
         // Обработчик нажатия на кнопку старт
         private void start_button_Click(object sender, EventArgs e)
@@ -46,9 +47,7 @@ namespace NumberKiller
 
             // Получаем значения из полей ввода и записываем в переменные          
             UserName = name_textbox.Text;
-
-            // Удаляем лишние символы из строки с телефоном
-            Phone = phone_textbox.Text.Trim(new char[] {' ', '*', '-', '(', ')' });          
+            Phone = phone_textbox.Text;          
 
             // Смотрим на наличие введенного имени и телефона в поля
             if ((name_textbox.Text == "") && (phone_textbox.Text == ""))
@@ -79,11 +78,16 @@ namespace NumberKiller
             // Если все введено производим запуск вызывая метод смены страницы
             else
             {
-                // Логируем информацию о жертве
+                // Иницилизируем лог систему, логируем информацию о жертве
+                // И включаем кнопку "ОТЧЕТ"
                 logSystem.init();
                 logSystem.log(2);
                 start_button.Enabled = false;
+
+                // Запускаем парсер
                 webParser.Start();
+
+                start_button.Enabled = true;
             }
         }
 
@@ -100,17 +104,10 @@ namespace NumberKiller
         }
 
         // Обработка кнопки "отчет"
+        // Не ловим исключение потому, что мы его заранее предотвратили, отключив кнопку, если файла нет
         private void log_button_Click(object sender, EventArgs e)
         {
-            try
-            {
-                // Открываем текстовый файл в блокноте
-                System.Diagnostics.Process.Start(@"C:\Users\User\Desktop\logs.txt");
-            }
-            catch (FileNotFoundException)
-            {
-
-            }
+            System.Diagnostics.Process.Start("logs.txt");
         }
 
         // Обработка кнопки выхода 
@@ -128,6 +125,5 @@ namespace NumberKiller
                 SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
             }
         }
-     
     }
 }

@@ -47,12 +47,13 @@
             // 
             // start_button
             // 
-            this.start_button.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.start_button.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.start_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.start_button.Font = new System.Drawing.Font("Roboto Th", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.start_button.Location = new System.Drawing.Point(173, 114);
+            this.start_button.Font = new System.Drawing.Font("Roboto Th", 20.75F);
+            this.start_button.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.start_button.Location = new System.Drawing.Point(173, 111);
             this.start_button.Name = "start_button";
-            this.start_button.Size = new System.Drawing.Size(138, 59);
+            this.start_button.Size = new System.Drawing.Size(138, 62);
             this.start_button.TabIndex = 0;
             this.start_button.Text = "ЗАПУСК";
             this.start_button.UseVisualStyleBackColor = false;
@@ -91,11 +92,12 @@
             // 
             // source_button
             // 
-            this.source_button.BackColor = System.Drawing.Color.LightGray;
+            this.source_button.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.source_button.Enabled = false;
             this.source_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.source_button.Font = new System.Drawing.Font("Roboto Th", 12.75F);
-            this.source_button.Location = new System.Drawing.Point(12, 111);
+            this.source_button.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.source_button.Location = new System.Drawing.Point(16, 111);
             this.source_button.Name = "source_button";
             this.source_button.Size = new System.Drawing.Size(74, 28);
             this.source_button.TabIndex = 5;
@@ -140,10 +142,13 @@
             // 
             // log_button
             // 
-            this.log_button.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.log_button.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.log_button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.log_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.log_button.Font = new System.Drawing.Font("Roboto Th", 12.75F);
-            this.log_button.Location = new System.Drawing.Point(12, 145);
+            this.log_button.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.log_button.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.log_button.Location = new System.Drawing.Point(16, 145);
             this.log_button.Name = "log_button";
             this.log_button.Size = new System.Drawing.Size(74, 28);
             this.log_button.TabIndex = 10;
@@ -175,9 +180,10 @@
             // 
             // exit_button
             // 
-            this.exit_button.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.exit_button.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.exit_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.exit_button.Font = new System.Drawing.Font("Roboto Th", 12.75F);
+            this.exit_button.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.exit_button.Location = new System.Drawing.Point(217, 220);
             this.exit_button.Name = "exit_button";
             this.exit_button.Size = new System.Drawing.Size(94, 28);
@@ -190,7 +196,7 @@
             // 
             this.progress_label.AutoSize = true;
             this.progress_label.Font = new System.Drawing.Font("Roboto Th", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.progress_label.Location = new System.Drawing.Point(12, 232);
+            this.progress_label.Location = new System.Drawing.Point(12, 229);
             this.progress_label.Name = "progress_label";
             this.progress_label.Size = new System.Drawing.Size(78, 19);
             this.progress_label.TabIndex = 13;
@@ -210,8 +216,9 @@
             // 
             // app_UI
             // 
-            this.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(323, 289);
+            this.ControlBox = false;
             this.Controls.Add(this.label1);
             this.Controls.Add(this.progress_label);
             this.Controls.Add(this.exit_button);
@@ -228,9 +235,10 @@
             this.Controls.Add(this.start_button);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "app_UI";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.TopMost = true;
             this.WindowState = System.Windows.Forms.FormWindowState.Minimized;
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.app_UI_MouseDown);
             this.ResumeLayout(false);

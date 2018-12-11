@@ -10,6 +10,7 @@ namespace phone_killer.core
         private string userName;
         private string userPhone;
 
+        // Иницилизация 
         public void init()
         {
             userName = NumberKiller.app_UI.UserName;
@@ -32,7 +33,7 @@ namespace phone_killer.core
         public void logField(object obj)
         {
             // Второй - возможна ли перезапись файла
-            file = new StreamWriter(@"C:\Users\User\Desktop\logs.txt", true);
+            file = new StreamWriter("", true);
 
             // Пишет перед каждой строчкой текущую дату и время
             file.Write(DateTime.Now.ToString("dd.MM.yyyy | HH:mm:ss "));
@@ -52,11 +53,10 @@ namespace phone_killer.core
             // Открываем поток для записи в файл
             // Первый аргумент - путь где будет создан/перезаписан файл
             // Второй - возможна ли перезапись файла
-            file = new StreamWriter(@"C:\Users\User\Desktop\logs.txt", true);
+            file = new StreamWriter("logs.txt", true);
 
             // Пишет перед каждой строчкой текущую дату и время
             file.Write(DateTime.Now.ToString("dd.MM.yyyy | HH:mm:ss "));
-
 
             switch (status) // Выборка по коду статуса и запись в файл информации
             {
@@ -77,6 +77,9 @@ namespace phone_killer.core
                     break;
                 case 3:
                     file.Write("- Проход завершен успешно.");
+                    break;
+                case 50:
+                    file.Write("- URL не был передан в DocumentCompleted");
                     break;
                 case 200:
                     file.Write("- Поле для ввода имени не найдено");

@@ -29,7 +29,7 @@ namespace phone_killer.core
         public int Pages { get; private set; }
 
         // Получить или задать номер страницы
-        public int PageNumber { get; set; }
+        public int PageNumber { get;  set; }
 
         // Иницилизация полей и списков
         public void Init()
@@ -60,111 +60,138 @@ namespace phone_killer.core
             // Объявление списка атрибутов для нажатия кнопки
             button.Add("input");
             button.Add("button order-btn ifr_button");
-
-            Pages = URLs.Count;
         }
 
+        // Метод запускающий работу класса
         public void Start()
         {
-            Init();
-            logSystem.logField(Pages);
+            Pages = URLs.Count - 1;
+            PageNumber = 0;
+            webBrowser.DocumentCompleted += new WebBrowserDocumentCompletedEventHandler(DocumentCompleted);
             ChangePage(PageNumber);
         }
 
         // Метод смены страницы
         private void ChangePage(int page)
         {
-            logSystem.log(0, URLs[page]);
-            //progress_bar.Value = page + 1;
+            if (Pages != 0)
+            {
+                // Логируем переход по страницам
+                logSystem.log(0, URLs[page]);
 
-            // Блок проверки валидности страницы
-            urlCheck = new Uri(URLs[page]);
+                // Блок проверки валидности страницы
+                urlCheck = new Uri(URLs[page]);
+                // Создаем запрос по URL сайта
+                request = (HttpWebRequest)WebRequest.Create(urlCheck);
+                // Время ожидания запроса, необходимо для точной прогрузки
+                request.Timeout = 2000;
+                // Отлавливание исключения 
+                try
+                {
+                    // Получаем ответ сайта
+                    response = (HttpWebResponse)request.GetResponse();
+                    // Создаем событие отвечающее за полную прогрузку страницы, в качестве аргумента - делегат
 
-            // Создаем запрос по URL сайта
-            request = (HttpWebRequest)WebRequest.Create(urlCheck);
-            request.Timeout = 1000;
+                    webBrowser.Navigate(URLs[page]);
+                }
 
-            webBrowser.DocumentCompleted += new WebBrowserDocumentCompletedEventHandler(Completed);
-            webBrowser.Navigate(URLs[page]);
-
-            //// Отвлавливание исключения 
-            //try
-            //{
-            //    // Получаем ответ сайта
-            //    response = (HttpWebResponse)request.GetResponse();
-               
-            //}
-
-            //// Вызывается если ответ не был получен
-            //catch (Exception)
-            //{
-            //    // Вызываем лог-систему и присваеваем ей код исключения (404 - страница не найдена)
-            //    logSystem.log(404);
-            //    Pages--;
-            //    PageNumber++;
-            //    ChangePage(PageNumber);
-            //}
+                // Вызывается если ответ не был получен
+                catch (Exception)
+                {
+                    // Вызываем лог-систему и присваеваем ей код исключения (404 - страница не найдена)
+                    logSystem.log(404);
+                    ChangePage(PageNumber);
+                }
+            }
+            else
+            {
+                // Логирование завершения прохода
+                logSystem.log(3);
+                return;
+            }
         }
 
         // Метод отвечающий за прогрузку веб-страницы до конца
-        private void Completed(object sender, WebBrowserDocumentCompletedEventArgs e)
+        private void DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
+            // Ловим исключение - отстуствие URL 
             try
             {
-                if (Pages > 0)
-                {
-                    logSystem.log(1);
-                    Pages--;
-                    PageNumber++;
-                    Auto_fill();
-                }
+                logSystem.log(1);
+                Auto_fill();
             }
             catch (NullReferenceException)
             {
-
+                // Логируем искючение
+                logSystem.log(50);
             }
         }
 
         // Метод автозаполнения полей и нажатия на кнопки на сайтах
         private void Auto_fill()
-        {
-            // Перебор страницы и поиск поля ввода имени 
-            // Если найденый атрибут NAME у тега INPUT совпадает с одним из элементом в списке возможных вариантов
-            // То заполняем поле в форме нашей переменной 
+        {         
+            // Перебор страницы на поиск тэга INPUT                 
             foreach (HtmlElement htmlElement in webBrowser.Document.GetElementsByTagName("input"))
-                foreach (String nameElement in name_field)
+            {
+                // Если найденый атрибут NAME у тега INPUT совпадает с одним из элементом в списке возможных вариантов
+                foreach (var nameElement in name_field)
+                {
                     if (htmlElement.GetAttribute("name").Equals(nameElement))
+                    {
+                        // То заполняем поле в форме нашей переменной 
                         htmlElement.InnerText = NumberKiller.app_UI.UserName;
+                    }
+                }
+            }
 
+            // Перебор страницы на поиск тэга INPUT (Поле ввода)
             foreach (HtmlElement htmlElement in webBrowser.Document.GetElementsByTagName("input"))
-                foreach (String phoneElement in phone_field)
+            {
+                foreach (var phoneElement in phone_field)
+                {
                     if (htmlElement.GetAttribute("name").Equals(phoneElement))
+                    {
                         htmlElement.InnerText = NumberKiller.app_UI.Phone;
+                    }
+                }
+            }
 
+            // Перебор страницы на поиск тэга INPUT (Кнопка подтверждения)
             foreach (HtmlElement htmlElement in webBrowser.Document.GetElementsByTagName("input"))
-                foreach (String buttonElement in button)
+            {
+                // Перебор страницы на поиск аттрибута совпадающего с одним из списка доступных аттрибутов
+                foreach (var buttonElement in button)
+                {
                     if (htmlElement.GetAttribute("type").Equals(buttonElement))
-                        htmlElement.InvokeMember("c2lick"); // Производим виртуальное нажатие кнопки
+                    {
+                        // Производим виртуальное нажатие кнопки
+                        htmlElement.InvokeMember("c2lick"); 
+                    }
+                }
+            }
 
+            // Перебор страницы на поиск тэга BUTTON 
             foreach (HtmlElement htmlElement in webBrowser.Document.GetElementsByTagName("button"))
-                foreach (String buttonElement in button)
+            {
+                // Перебор страницы на поиск аттрибута совпадающего с одним из списка доступных аттрибутов
+                foreach (var buttonElement in button)
+                {
                     if (htmlElement.GetAttribute("type").Equals(buttonElement) || htmlElement.GetAttribute("class").Equals(buttonElement))
-                        htmlElement.InvokeMember("cl2ick"); // Производим виртуальное нажатие кнопки
+                    {
+                        // Производим виртуальное нажатие кнопки
+                        htmlElement.InvokeMember("cl2ick"); 
+                    }
+                }
+            }
 
             // Логируем выполнение 
-            logSystem.log(-1);
+            logSystem.log(-1);    
 
-            // Стоп сигнал если количество страниц будет равно нулю
-            if (Pages != 0)
-                ChangePage(PageNumber);
+            // Декремент и инкрементЁ
+            Pages--; PageNumber++;
 
-            // Сброс полоски прогресса и включение кнопки
-            else if (Pages == 0)
-            {
-               // start_button.Enabled = true;
-                //progress_bar.Value = 0;
-                logSystem.log(3);
-            }
+            // Если количество страниц не равно нулю, продолжать
+            ChangePage(PageNumber);
         }
     }
 }
